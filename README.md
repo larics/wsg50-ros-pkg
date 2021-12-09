@@ -57,3 +57,44 @@ The script *cmd_measure.lua* must be running on the gripper for the script mode.
 ## Node wsg\_50_can
 
 Remains unchanged; new features not implemented here. 
+
+
+## Current development status
+
+Managed to get it running, seems that starting `wsg_50_tcp.launch` starts and communicates with gripper as it should. 
+
+Launch file `wsg_50_tcp_script.launch` fails with following error: 
+```
+[wsg_50_driver-2] process has died [pid 145052, exit code 1, cmd /home/developer/moveit_ws/devel/lib/wsg_50_driver/wsg_50_ip __name:=wsg_50_driver __log:=/home/developer/.ros/log/faecb51c-58d2-11ec-836b-5405dbe628bd/wsg_50_driver-2.log].
+log file: /home/developer/.ros/log/faecb51c-58d2-11ec-836b-5405dbe628bd/wsg_50_driver-2*.log
+```
+which may be cause by communication issues (unlikely) or firmware mismatch (likely). It's quite hard to get following firmware, but for our use case it could be ok 
+to use service `/wsg_50_driver/grasp`. 
+
+Which when executed ok, returns: 
+```
+rosservice call /wsg_50_driver/move "width: 50.0
+speed: 10.0" 
+error: 0
+
+```
+
+When fails, returns: 
+```
+rosservice call /wsg_50_driver/grasp "width: 45.0
+speed: 10.0" 
+error: 255
+```
+and in logout prints: 
+```
+grasp()	Command GRASP not successful: Command failed
+```
+
+
+### TODO: 
+
+- [ ] Test it with real objects --> implicit knowledge about object 
+- [ ] Test it for longer period of time 
+
+
+
